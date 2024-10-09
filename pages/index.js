@@ -1,5 +1,5 @@
-function Home () {
-  return <h1>meme de 🐦</h1>
+function Home() {
+  return <h1>meme de 🐦</h1>;
 }
 
-export default Home
+export default Home;
