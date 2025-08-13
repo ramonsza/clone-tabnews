@@ -1,7 +1,7 @@
 import orchestrator from "tests/orchestrator.js";
 import { version as uuidVersion } from "uuid";
 import session from "models/session.js";
-import setCookieParse from "set-cookie-parser";
+import setCookieParser from "set-cookie-parser";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -136,7 +136,7 @@ describe("POST /api/v1/sessions", () => {
 
       expect(expiresAt - createdAt).toEqual(session.EXPIRATION_IN_MILLISECONDS);
 
-      const parsedSetCookie = setCookieParse(response, {
+      const parsedSetCookie = setCookieParser(response, {
         map: true,
       });
       expect(parsedSetCookie.session_id).toEqual({
