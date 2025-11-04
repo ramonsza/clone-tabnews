@@ -1,7 +1,7 @@
 import database from "infra/database.js";
 import email from "infra/email.js";
 import webserver from "infra/webserver.js";
-
+import { NotFoundError } from "infra/errors";
 const EXPIRATION_IN_MILLISECONDS = 60 * 15 * 1000; // 15 minutes
 
 async function create(userId) {
@@ -61,10 +61,38 @@ Equipe RSZA
   });
 }
 
+async function findOneValidById(token) {
+  const results = await database.query({
+    text: `
+        SELECT
+          *
+        FROM 
+          user_activation_tokens
+        WHERE
+          id = $1
+          AND expires_at > NOW()
+          AND used_at IS NULL
+        LIMIT
+          1
+      ;`,
+    values: [token],
+  });
+
+  if (results.rowCount === 0) {
+    throw new NotFoundError({
+      message: "Token inválido ou expirado",
+      action: "Faça um novo cadastro",
+    });
+  }
+
+  return results.rows[0];
+}
+
 const activation = {
   create,
   findOneByUserId,
   sendEmailToUser,
+  findOneValidById,
 };
 
 export default activation;
