@@ -11,7 +11,7 @@ beforeAll(async () => {
 });
 
 describe("Use case: Registration Flow (all successful)", () => {
-  let createUserResponseBody;
+  let createdUserResponseBody;
   let activationTokenId;
 
   test("Create user account", async () => {
@@ -32,16 +32,16 @@ describe("Use case: Registration Flow (all successful)", () => {
 
     expect(createUserResponse.status).toBe(201);
 
-    createUserResponseBody = await createUserResponse.json();
+    createdUserResponseBody = await createUserResponse.json();
 
-    expect(createUserResponseBody).toEqual({
-      id: createUserResponseBody.id,
+    expect(createdUserResponseBody).toEqual({
+      id: createdUserResponseBody.id,
       username: "RegistrationFlow",
       email: "registration.flow@rsza.com.br",
-      password: createUserResponseBody.password,
+      password: createdUserResponseBody.password,
       features: ["read:activation_token"],
-      created_at: createUserResponseBody.created_at,
-      updated_at: createUserResponseBody.updated_at,
+      created_at: createdUserResponseBody.created_at,
+      updated_at: createdUserResponseBody.updated_at,
     });
   });
 
@@ -61,7 +61,7 @@ describe("Use case: Registration Flow (all successful)", () => {
 
     const activationTokenObject =
       await activation.findOneValidById(activationTokenId);
-    expect(activationTokenObject.user_id).toEqual(createUserResponseBody.id);
+    expect(activationTokenObject.user_id).toEqual(createdUserResponseBody.id);
     expect(activationTokenObject.used_at).toBe(null);
   });
 
@@ -83,7 +83,27 @@ describe("Use case: Registration Flow (all successful)", () => {
     expect(activatedUser.features).toEqual(["create:session"]);
   });
 
-  test("Login", async () => {});
+  test("Login", async () => {
+    const createSessionResponse = await fetch(
+      "http://localhost:3000/api/v1/sessions",
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "registration.flow@rsza.com.br",
+          password: "RegistrationFlowPassword",
+        }),
+      },
+    );
+
+    expect(createSessionResponse.status).toBe(201);
+
+    const createSessionResponseBody = await createSessionResponse.json();
+
+    expect(createSessionResponseBody.user_id).toBe(createdUserResponseBody.id);
+  });
 
   test("Get user information", async () => {});
 });
