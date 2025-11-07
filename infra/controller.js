@@ -1,7 +1,7 @@
 import * as cookie from "cookie";
 import session from "models/session.js";
-import user from "models/user";
-
+import user from "models/user.js";
+import authorization from "models/authorization.js";
 import {
   MethodNotAllowedError,
   InternalServerError,
@@ -61,7 +61,7 @@ async function clearSessionCookie(response) {
 
 async function injectAnonymousOrUser(request, response, next) {
   if (request.cookies?.session_id) {
-    await injectAuthenticateUser(request);
+    await injectAuthenticatedUser(request);
     return next();
   }
 
@@ -69,10 +69,10 @@ async function injectAnonymousOrUser(request, response, next) {
   return next();
 }
 
-async function injectAuthenticateUser(request) {
+async function injectAuthenticatedUser(request) {
   const sessionToken = request.cookies.session_id;
   const sessionObject = await session.findOneValidByToken(sessionToken);
-  const userObject = await user.findOneValidByToken(sessionObject.user_id);
+  const userObject = await user.findOneById(sessionObject.user_id);
 
   request.context = {
     ...request.context,
@@ -93,9 +93,9 @@ function injectAnonymousUser(request) {
 
 function canRequest(feature) {
   return function canRequestMiddleware(request, response, next) {
-    const useTryingToRequest = request.context.user;
+    const userTryingToRequest = request.context.user;
 
-    if (useTryingToRequest.features.includes(feature)) {
+    if (authorization.can(userTryingToRequest, feature)) {
       return next();
     }
 
