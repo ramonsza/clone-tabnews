@@ -1,6 +1,6 @@
 {
   "name": "clone-tabnews",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Projeto de aperfeiçoamento em programação",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
     "cookie": "1.0.2",
     "dotenv": "16.4.5",
     "dotenv-expand": "11.0.6",
-    "next": "14.2.5",
+    "next": "14.2.35",
     "next-connect": "1.0.0",
     "node-pg-migrate": "7.6.1",
     "nodemailer": "7.0.5",
@@ -52,7 +52,8 @@
     "husky": "9.1.6",
     "jest": "29.7.0",
     "prettier": "3.3.3",
-    "set-cookie-parser": "2.7.1"
+    "set-cookie-parser": "2.7.1",
+    "typescript": "5.9.3"
   },
   "config": {
     "commitizen": {
