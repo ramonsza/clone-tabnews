@@ -40,7 +40,9 @@ function DatabaseStatus() {
   if (!isLoading && data) {
     databaseStatusInformation = (
       <>
-        <div>Versão: {data.dependencies.database.version}</div>
+        {data.dependencies.database.version && (
+          <div>Versão: {data.dependencies.database.version}</div>
+        )}
         <div>
           Conexões abertas: {data.dependencies.database.opened_connections}
         </div>
