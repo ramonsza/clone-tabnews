@@ -52,7 +52,7 @@ describe("GET /api/v1/migrations", () => {
           action: `Verifique se o seu usuário possui a feature "read:migration"`,
         });
       });
-      test('Privileged user with "read:migration" feature', async () => {
+      test("Privileged user with `read:migration` feature", async () => {
         const privilegedUser = await orchestrator.createUser();
 
         const activatedPrivilegedUser =

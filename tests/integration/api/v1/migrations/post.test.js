@@ -32,7 +32,7 @@ describe("POST /api/v1/migrations", () => {
 
   describe("Default user", () => {
     describe("Running pending migrations", () => {
-      test('User with "create:migration" feature', async () => {
+      test("User with `create:migration` feature", async () => {
         const privilegedUser = await orchestrator.createUser();
 
         const activatedPrivilegedUser =

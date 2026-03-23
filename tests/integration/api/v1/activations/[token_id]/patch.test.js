@@ -190,8 +190,7 @@ describe("PATCH /api/v1/activations/[token]", () => {
       const responseBody = await response.json();
 
       expect(responseBody).toEqual({
-        action:
-          'Verifique se o seu usuário possui a feature "read:activation_token"',
+        action: `Verifique se o seu usuário possui a feature "read:activation_token"`,
         message: "Você não possui permissão para executar esta ação.",
         name: "ForbiddenError",
         status_code: 403,

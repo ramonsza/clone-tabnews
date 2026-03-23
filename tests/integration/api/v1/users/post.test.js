@@ -1,5 +1,4 @@
 import orchestrator from "tests/orchestrator";
-//import database from "infra/database";
 import { version as uuidVersion } from "uuid";
 import user from "models/user.js";
 import password from "models/password.js";
@@ -56,7 +55,7 @@ describe("POST /api/v1/users", () => {
       expect(correctPasswordMatch).toBe(true);
       expect(inCorrectPasswordMatch).toBe(false);
     });
-    test("With duplicated 'email'", async () => {
+    test("With duplicated `email`", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
         headers: {
@@ -95,7 +94,7 @@ describe("POST /api/v1/users", () => {
       });
     });
 
-    test("With duplicated 'username'", async () => {
+    test("With duplicated `username`", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
         headers: {
@@ -161,7 +160,7 @@ describe("POST /api/v1/users", () => {
 
       expect(user2ResponseBody).toEqual({
         name: "ForbiddenError",
-        action: 'Verifique se o seu usuário possui a feature "create:user"',
+        action: `Verifique se o seu usuário possui a feature "create:user"`,
         message: "Você não possui permissão para executar esta ação.",
         status_code: 403,
       });
