@@ -36,7 +36,7 @@ describe("POST /api/v1/migrations", () => {
         const activatedPrivilegedUser =
           await orchestrator.activateUser(privilegedUser);
         const privilegedUserSession = await orchestrator.createSession(
-          activatedPrivilegedUser.id,
+          activatedPrivilegedUser,
         );
         await orchestrator.addFeaturesToUser(activatedPrivilegedUser, [
           "create:migration",
