@@ -1,4 +1,5 @@
 import orchestrator from "tests/orchestrator";
+import webserver from "infra/webserver.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -10,12 +11,9 @@ describe("POST /api/v1/migrations", () => {
   describe("Anonymous user", () => {
     describe("Running pending migrations", () => {
       test("For the first time", async () => {
-        const response = await fetch(
-          "http://localhost:3000/api/v1/migrations",
-          {
-            method: "POST",
-          },
-        );
+        const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
+          method: "POST",
+        });
 
         expect(response.status).toBe(403);
         const responseBody = await response.json();
@@ -32,28 +30,25 @@ describe("POST /api/v1/migrations", () => {
 
   describe("Default user", () => {
     describe("Running pending migrations", () => {
-      test('User with "create:migration" feature', async () => {
+      test("User with `create:migration` feature", async () => {
         const privilegedUser = await orchestrator.createUser();
 
         const activatedPrivilegedUser =
           await orchestrator.activateUser(privilegedUser);
         const privilegedUserSession = await orchestrator.createSession(
-          activatedPrivilegedUser.id,
+          activatedPrivilegedUser,
         );
         await orchestrator.addFeaturesToUser(activatedPrivilegedUser, [
           "create:migration",
         ]);
 
-        const response = await fetch(
-          "http://localhost:3000/api/v1/migrations",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Cookie: `session_id=${privilegedUserSession.token}`,
-            },
+        const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${privilegedUserSession.token}`,
           },
-        );
+        });
 
         expect(response.status).toBe(200);
 
